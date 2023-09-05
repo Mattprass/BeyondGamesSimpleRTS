@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Script that manages the teleporting behaviors potentially from multiple players
+/// and enforces any rules associated with teleportation.
+/// This is intentionally modeled as a "pesudo-server" where similar to a multiplayer 
+/// game, the player will need to get permission to place down a teleporter.
+/// </summary>
 public class TeleporterManager : MonoBehaviour
 {
     public static TeleporterManager Instance { get; private set; }
@@ -10,10 +16,13 @@ public class TeleporterManager : MonoBehaviour
     private GameObject teleporterPrefab;
     
     private int teleportersPlaced;
+    //Data structure to hold the teleporting data for each teleporting player
     private Dictionary<PlaceTeleporters, PlayerTeleporterInfo> playersWhoCanPlaceTeleporters;
 
+    //At the moment, players are limited to having 2 teleporters (which forms 1 link)
     private const int MAX_TELEPORTERS_PER_PLAYER = 2;
 
+    //Singleton
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -28,6 +37,7 @@ public class TeleporterManager : MonoBehaviour
         playersWhoCanPlaceTeleporters = new Dictionary<PlaceTeleporters, PlayerTeleporterInfo>();
     }
 
+    //Called at the player's Start() method
     public void AddTeleportingPlayer(PlaceTeleporters player)
     {
         player.OnTeleporterPlaced -= PlaceTeleporterForPlayer;
@@ -35,6 +45,9 @@ public class TeleporterManager : MonoBehaviour
         playersWhoCanPlaceTeleporters.Add(player, new PlayerTeleporterInfo());
     }
 
+    //This is what actually places down a teleporter in the world
+    ///TODO: Not a big fan of calling the same coniditon twice, but the variable does change
+    ///in the middle of the method
     private void PlaceTeleporterForPlayer(PlaceTeleporters player, Vector3 teleporterPosition)
     {
         if (teleportersPlaced == MAX_TELEPORTERS_PER_PLAYER)
@@ -54,6 +67,7 @@ public class TeleporterManager : MonoBehaviour
         }
     }
 
+    //Destory both teleporters after 10 seconds of BOTH teleporters being spawned
     private IEnumerator DestoryTeleporters(PlayerTeleporterInfo teleporters)
     {
         yield return new WaitForSeconds(10f);
@@ -65,6 +79,7 @@ public class TeleporterManager : MonoBehaviour
         Debug.Log("You can now place more teleporters!");
     }
 
+    //preventing memory leaks
     private void OnDestroy()
     {
         foreach (var player in playersWhoCanPlaceTeleporters.Keys)
@@ -79,6 +94,9 @@ public class PlayerTeleporterInfo
     public Teleporter teleporterOne;
     public Teleporter teleporterTwo;
 
+    //If it's the first teleporter placed for a player, then it becomes teleporterOne
+    //If it's the second teleporter placed, then it becomes the teleporterTwo and forms 
+    //the link between the first and second (and vice versa)
     public void AddTeleporter(Teleporter tele)
     {
         if (teleporterOne == null)

@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Script that takes the input to drop a teleporter
+/// </summary>
 public class PlaceTeleporters : MonoBehaviour
 {
     public Action<PlaceTeleporters, Vector3> OnTeleporterPlaced;

@@ -18,9 +18,9 @@ public class Movement : MonoBehaviour
         mainCamera = Camera.main;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        //Right click to move
         if (Input.GetMouseButtonDown(1))
         {
             RaycastHit hit;
@@ -38,5 +38,11 @@ public class Movement : MonoBehaviour
                 transform.eulerAngles = new Vector3(0f, rotationY, 0f);
             }
         }
+    }
+
+    //For teleportation purposes
+    public void ForceMove(Vector3 newPosition)
+    {
+        transform.position = newPosition;
     }
 }

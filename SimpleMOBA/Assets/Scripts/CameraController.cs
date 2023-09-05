@@ -32,12 +32,14 @@ public class CameraController : MonoBehaviour
     {
         HandleMovementInput();
 
-        if (Input.GetButton("Jump"))
+        //Holding space to follow the player
+        if (Input.GetButton("FollowPlayer"))
             isFollowingPlayer = true;
         else
             isFollowingPlayer = false;
     }
 
+    //Camera movement should be in LateUpdate to prevent stuttery movement
     void LateUpdate()
     {
         if (isFollowingPlayer)
@@ -50,16 +52,17 @@ public class CameraController : MonoBehaviour
 
     void HandleMovementInput()
     {
+        //For the camera to move faster, hold shift
         if (Input.GetButton("CameraSprint"))
             movementSpeed = fastSpeed;
         else
             movementSpeed = normalSpeed;
 
-
+        //Camera Movement
         newPosition = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"))
             .normalized * movementSpeed;
 
-
+        //Camera Zoom
         if (Input.mouseScrollDelta.y != 0f)
             newZoom += Input.mouseScrollDelta.y * zoomAmount;
 
