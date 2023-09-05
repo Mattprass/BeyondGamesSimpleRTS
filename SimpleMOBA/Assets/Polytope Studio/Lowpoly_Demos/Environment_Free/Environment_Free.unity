@@ -904,8 +904,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67851c841eee52f4ca29f6abaa63962f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  normalSpeed: 1
-  fastSpeed: 3
+  normalSpeed: 3
+  fastSpeed: 5
   movementTime: 5
   camTransform: {fileID: 1589245845}
   target: {fileID: 56267712}
@@ -1891,7 +1891,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1589245842}
   m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 24.31, z: -15}
+  m_LocalPosition: {x: 0, y: 24.31, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 856945957}

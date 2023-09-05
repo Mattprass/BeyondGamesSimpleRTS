@@ -41,13 +41,10 @@ public class CameraController : MonoBehaviour
     void LateUpdate()
     {
         if (isFollowingPlayer)
-        {
             transform.position = target.position;
-        }
         else
-        {
-            transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * movementTime);
-        }
+            transform.position = Vector3.Lerp(transform.position, transform.position + newPosition, Time.deltaTime * movementTime);
+        
         camTransform.localPosition = Vector3.Lerp(camTransform.localPosition, newZoom, Time.deltaTime * movementTime);
     }
 
@@ -58,14 +55,10 @@ public class CameraController : MonoBehaviour
         else
             movementSpeed = normalSpeed;
 
-        if (Input.GetAxis("Vertical") > 0f)
-            newPosition += (transform.forward * movementSpeed);
-        if (Input.GetAxis("Vertical") < 0f)
-            newPosition += (transform.forward * -movementSpeed);
-        if (Input.GetAxis("Horizontal") > 0f)
-            newPosition += (transform.right * movementSpeed);
-        if (Input.GetAxis("Horizontal") < 0f)
-            newPosition += (transform.right * -movementSpeed);
+
+        newPosition = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"))
+            .normalized * movementSpeed;
+
 
         if (Input.mouseScrollDelta.y != 0f)
             newZoom += Input.mouseScrollDelta.y * zoomAmount;
